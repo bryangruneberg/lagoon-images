@@ -36,5 +36,10 @@ ENV TMPDIR=/tmp \
     # When Bash is invoked as non-interactive (like `bash -c command`) it sources a file that is given in `BASH_ENV`
     BASH_ENV=/home/.bashrc
 
+# add a default user/group which is used to run the container process in kubernetes
+# taken from https://github.com/hexops/dockerfile
+RUN addgroup -g 10001 -S nonroot \
+  && adduser -u 10000 -S -G nonroot -h /home/nonroot nonroot
+
 ENTRYPOINT ["/sbin/tini", "--", "/lagoon/entrypoints.sh"]
 CMD ["/bin/docker-sleep"]
